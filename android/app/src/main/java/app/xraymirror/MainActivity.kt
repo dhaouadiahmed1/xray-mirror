@@ -302,10 +302,20 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun orientBitmap(src: Bitmap, rotationDegrees: Int, frontCamera: Boolean): Bitmap {
+        // NOTE: Matrix.isIdentity() is API 29+ but minSdk is 26, so track
+        // the transform explicitly instead of calling it (would crash on
+        // API 26-28 phones at runtime).
         val matrix = Matrix()
-        if (rotationDegrees != 0) matrix.postRotate(rotationDegrees.toFloat())
-        if (frontCamera) matrix.postScale(-1f, 1f)
-        return if (matrix.isIdentity) src
+        var transformed = false
+        if (rotationDegrees != 0) {
+            matrix.postRotate(rotationDegrees.toFloat())
+            transformed = true
+        }
+        if (frontCamera) {
+            matrix.postScale(-1f, 1f)
+            transformed = true
+        }
+        return if (!transformed) src
         else Bitmap.createBitmap(src, 0, 0, src.width, src.height, matrix, true)
     }
 

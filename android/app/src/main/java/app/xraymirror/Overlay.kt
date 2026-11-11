@@ -7,6 +7,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.clipRect
 
 /**
  * The anatomy overlay, drawn on a Compose Canvas over the camera preview.
@@ -285,7 +286,11 @@ fun DrawScope.drawXrayOverlay(
                     else jawPath.lineTo(p.x, p.y)
                 }
                 if (started) {
-                    drawPath(jawPath, RED.copy(alpha = strokeAlpha * 0.8f), Stroke(width = strokeW * 0.8f))
+                    drawPath(
+                        path = jawPath,
+                        color = RED.copy(alpha = strokeAlpha * 0.8f),
+                        style = Stroke(width = strokeW * 0.8f)
+                    )
                 }
             }
 
